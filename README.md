@@ -1,115 +1,189 @@
 # SecureBank
 
-SecureBank is a full-stack fintech security engineering platform built to demonstrate modern AppSec, SOC monitoring, and DevSecOps workflows.
+SecureBank is a full-stack security engineering platform built to demonstrate modern application security, SOC monitoring, and DevSecOps workflows.
 
-This project follows a real security lifecycle:
-
-**Build → Break → Exploit → Fix → Monitor → Automate → Deploy**
-
-SecureBank is not a basic banking dashboard. It is designed as a realistic enterprise-style security platform where vulnerabilities are intentionally introduced, exploited, remediated, monitored, and later validated through CI/CD automation.
+The project simulates realistic security scenarios where vulnerabilities are intentionally introduced, exploited, remediated, monitored, and later validated through automated security testing and CI/CD pipelines.
 
 ---
 
-## Table of Contents
+# Project Overview
 
-- [Application Preview](#application-preview)
-- [Security Engineering Features](#security-engineering-features)
-- [AppSec Case Studies](#appsec-case-studies)
-- [Security Operations Monitoring](#security-operations-monitoring)
-- [Security Testing](#security-testing)
-- [DevSecOps CI/CD](#devsecops-cicd)
-- [Dockerized Infrastructure](#dockerized-infrastructure)
-- [Technical Stack](#technical-stack)
-- [Future Roadmap](#future-roadmap)
+SecureBank focuses on the complete security lifecycle:
 
-## Project Goals
+```text
+Build → Exploit → Detect → Remediate → Monitor → Automate
+```
 
-SecureBank demonstrates:
+The platform combines:
 
-- Secure full-stack application architecture
-- JWT authentication
-- Role-Based Access Control
-- IDOR prevention and exploitation
-- File upload security
-- Security telemetry
-- SOC-style event monitoring
-- Dockerized backend and database
-- Jest security regression testing
-- GitHub Actions CI/CD security automation
+- Application Security (AppSec)
+- Security Operations (SOC)
+- DevSecOps
+- Secure API Engineering
+- CI/CD Security Automation
 
 ---
 
-## Application Preview
+# Core Features
 
-### Login Page
+| Feature                          | Status      |
+| -------------------------------- | ----------- |
+| JWT Authentication               | Implemented |
+| Role-Based Access Control (RBAC) | Implemented |
+| Protected API Routes             | Implemented |
+| IDOR Prevention                  | Implemented |
+| Secure File Upload Validation    | Implemented |
+| Security Event Monitoring        | Implemented |
+| SOC Telemetry Dashboard          | Implemented |
+| Jest Security Testing            | Implemented |
+| GitHub Actions CI/CD             | Implemented |
+| Dockerized Infrastructure        | Implemented |
+
+---
+
+# Architecture Overview
+
+![Architecture Diagram](docs/screenshots/ui/architecture-diagram.png)
+
+SecureBank follows a modular security-focused architecture designed around separation of concerns, protected APIs, telemetry collection, and operational monitoring.
+
+## Architecture Components
+
+### Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- Axios
+- React Router
+
+### Backend
+
+- Node.js
+- Express.js
+- JWT Authentication
+- RBAC Middleware
+- PostgreSQL
+- Multer Upload Validation
+
+### Security Operations
+
+- Security telemetry collection
+- Audit event logging
+- Threat monitoring
+- Operational dashboards
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+- GitHub Actions
+- CI/CD automation
+
+---
+
+# Application Preview
+
+## Login Page
 
 ![Login Page](docs/screenshots/ui/login.png)
 
-### Admin Dashboard
+---
 
-![Dashboard](docs/screenshots/ui/dashboard.png)
+## Admin Dashboard
 
-### Customer Dashboard
+![Admin Dashboard](docs/screenshots/ui/dashboard.png)
 
-![Dashboard](docs/screenshots/ui/dashboard%20Customer.png)
+---
 
-### Security Center
+## Customer Dashboard
+
+![Customer Dashboard](docs/screenshots/ui/dashboard%20Customer.png)
+
+---
+
+## Security Operations Center
 
 ![Security Center](docs/screenshots/ui/security-center.png)
 
-### Audit Logs
+---
+
+## Audit Logs
 
 ![Audit Logs](docs/screenshots/ui/audit-logs.png)
 
 ---
 
-## Security Engineering Features
+# Security Case Studies
 
-| Area                      | Status      |
-| ------------------------- | ----------- |
-| JWT Authentication        | Implemented |
-| Protected Routes          | Implemented |
-| RBAC Authorization        | Implemented |
-| IDOR Protection           | Implemented |
-| Upload Validation         | Implemented |
-| Security Event Monitoring | Implemented |
-| SOC Event Feed            | Implemented |
-| Jest Security Tests       | Implemented |
-| GitHub Actions CI/CD      | In Progress |
-| Dockerized Services       | Implemented |
+SecureBank includes controlled security scenarios used to demonstrate vulnerability exploitation, remediation, and monitoring workflows.
 
 ---
 
-## AppSec Case Studies
+# 1. Broken Access Control (RBAC)
 
-SecureBank includes controlled vulnerability demonstrations.
+Customer users attempted to access administrator-only security telemetry endpoints.
 
-### 1. Broken Access Control (RBAC)
+## Protected Endpoint
 
-A customer user was prevented from accessing admin-only security telemetry.
+```text
+/api/security/events
+```
+
+---
+
+## Unauthorized Access Attempt
 
 ![RBAC Forbidden](docs/screenshots/appsec/rbac-forbidden.png)
 
-Security controls demonstrated:
-
-- JWT role claims
-- Backend role middleware
-- Admin-only routes
-- Forbidden access handling
-- Security event logging
+The request was denied using backend role validation middleware.
 
 ---
 
-### 2. IDOR (Insecure Direct Object Reference)
+## Security Controls Implemented
+
+- JWT role claims
+- Role validation middleware
+- Protected admin routes
+- Access denial handling
+- Security event generation
+
+---
+
+# 2. IDOR (Insecure Direct Object Reference)
 
 SecureBank demonstrates object-level authorization using transaction ownership validation.
 
-The vulnerable version allowed users to access another user's transaction by changing the transaction ID.
+The vulnerable implementation originally allowed users to access another user's transaction by modifying transaction IDs directly inside API requests.
 
-![IDOR Exploit](docs/screenshots/appsec/idor-vulnerable-request-1.png)
-![IDOR Exploit](docs/screenshots/appsec/idor-vulnerable-request-2.png)
+---
 
-Remediation:
+## Vulnerable Request Example
+
+```text
+/api/transactions/1
+/api/transactions/2
+```
+
+---
+
+## Unauthorized Transaction Access
+
+![IDOR Request 1](docs/screenshots/appsec/idor-vulnerable-request-1.png)
+
+![IDOR Request 2](docs/screenshots/appsec/idor-vulnerable-request-2.png)
+
+---
+
+## Root Cause
+
+The original backend implementation validated authentication but failed to verify transaction ownership.
+
+---
+
+## Remediation
+
+Ownership validation was added before returning transaction data.
 
 ```js
 if (transaction.sender !== req.user.username) {
@@ -121,13 +195,13 @@ if (transaction.sender !== req.user.username) {
 
 ---
 
-## Validation
-
-After remediation, unauthorized transaction access is blocked.
+## Fixed Access Control
 
 ![IDOR Fixed](docs/screenshots/appsec/idor-fixed-access-denied.png)
 
-This demonstrates:
+---
+
+## Security Improvements
 
 - Object-level authorization
 - Ownership validation
@@ -136,25 +210,31 @@ This demonstrates:
 
 ---
 
-### 3. File Upload Security
+# 3. File Upload Security
 
-SecureBank demonstrates unrestricted file upload vulnerabilities and secure remediation workflows.
+SecureBank also demonstrates unrestricted file upload vulnerabilities and secure upload validation.
 
-### Vulnerable Upload Configuration
+---
 
-The original implementation accepted unrestricted file uploads.
+## Vulnerable Upload Configuration
+
+The original implementation accepted unrestricted file uploads without validation.
 
 ![Vulnerable Upload Config](docs/screenshots/appsec/upload-vulnerable-config.png)
 
-Malicious files such as `.jsx` were uploaded successfully.
+---
+
+## Malicious Upload Accepted
+
+A malicious `.jsx` file was uploaded successfully in the vulnerable version.
 
 ![Malicious Upload Success](docs/screenshots/appsec/upload-malicious-success.png)
 
 ---
 
-### Secure Upload Remediation
+# Secure Upload Remediation
 
-MIME validation was implemented using Multer file filtering.
+MIME validation was later implemented using Multer file filtering.
 
 ![Upload Remediation Code](docs/screenshots/appsec/upload-remediation-code.png)
 
@@ -164,87 +244,83 @@ const allowedTypes = ["application/pdf", "image/png", "image/jpeg"];
 
 ---
 
-### Upload Validation Result
+## Valid Upload Result
 
 Legitimate files continue to upload successfully.
 
 ![Valid Upload](docs/screenshots/appsec/upload-valid-file-success.png)
 
-Blocked upload attempts generated validation failures.
+---
+
+## Blocked Malicious Upload
+
+Invalid file uploads now generate validation failures.
 
 ![Blocked Upload](docs/screenshots/appsec/upload-blocked-error.png)
 
 ---
 
-### Security Engineering Insight
+## Security Concepts Demonstrated
 
-This case study demonstrates:
-
-- Unrestricted file upload risk
+- Unrestricted file upload risks
 - MIME validation
-- Defense-in-depth concepts
-- Validation bypass awareness
-- Secure file handling strategies
+- Secure upload handling
+- Defense-in-depth validation
+- Backend file filtering
 
 ---
 
-## Security Operations Monitoring
+# Security Operations & Monitoring
 
-SecureBank evolved beyond AppSec demonstrations into operational security telemetry monitoring.
-
----
-
-### RBAC Security Event Detection
-
-Unauthorized administrative access attempts are automatically detected and logged.
-
-![RBAC Forbidden](docs/screenshots/soc/rbac-denied-response.png)
+SecureBank includes SOC-style monitoring and operational telemetry tracking.
 
 ---
 
-### Security Telemetry Feed
+# RBAC Security Event Monitoring
 
-Security events are surfaced inside the Security Center dashboard.
+Unauthorized administrative access attempts generate security telemetry events automatically.
 
 ![RBAC Security Feed](docs/screenshots/soc/rbac-security-event-feed.png)
 
-Example event:
+---
+
+## Example Security Event
 
 ```json
 {
   "type": "RBAC_DENIED",
   "severity": "high",
   "user": "customer_user",
-  "description": "Unauthorized attempt to access restricted operational resource",
-  "endpoint": "/api/security/events"
+  "endpoint": "/api/security/events",
+  "description": "Unauthorized access attempt"
 }
 ```
 
 ---
 
-### Backend Detection Engineering
+## Backend Detection Logic
 
-RBAC violations trigger backend telemetry generation.
+RBAC violations generate operational telemetry events inside the backend.
 
 ![RBAC Detection Code](docs/screenshots/soc/rbac-security-code.png)
 
 ---
 
-### Operational Backend Logging
+## Operational Terminal Logs
 
-Backend authentication and audit activity are logged operationally.
+Authentication and authorization activity is logged operationally.
 
-![RBAC Terminal Logs](docs/screenshots/soc/rbac-terminal-logs.png)
-
----
-
-## Security Metrics API
-
-SecureBank includes protected operational telemetry endpoints.
+![RBAC Logs](docs/screenshots/soc/rbac-terminal-logs.png)
 
 ---
 
-### Unauthorized Metrics Access
+# Security Metrics API
+
+SecureBank includes protected telemetry endpoints for operational monitoring.
+
+---
+
+## Unauthorized Metrics Access
 
 Requests without authentication are denied.
 
@@ -252,45 +328,49 @@ Requests without authentication are denied.
 
 ---
 
-### Authorized Metrics Access
+## Authorized Metrics Access
 
-Authenticated users can access operational telemetry.
+Authenticated requests successfully retrieve telemetry data.
 
 ![Metrics Authorized](docs/screenshots/soc/metrics-authorized.png)
 
-Metrics include:
+---
 
-- SQL injection attempts
-- Failed logins
-- Active threats
-- Secure API request tracking
+## Metrics Include
+
+- Failed login attempts
+- SQL injection detections
+- Threat counters
+- Security telemetry
+- Protected API activity
 
 ---
 
-### Backend Authentication Logging
-
-JWT authentication activity is logged server-side.
-
-![Metrics Terminal Logs](docs/screenshots/soc/metrics-terminal-auth.png)
-
----
-
-## Security Testing
+# Security Testing
 
 SecureBank includes automated backend security regression testing using Jest and Supertest.
 
 ![Jest Tests](docs/screenshots/devsecops/jest-tests-pass.png)
 
-### Middleware Security Testing
+---
 
-Implemented test coverage includes:
+# Security Test Coverage
 
-- JWT authentication middleware
-- RBAC authorization middleware
-- Unauthorized request validation
-- Token validation workflows
+## Authentication Middleware
 
-Example test structure:
+- JWT validation
+- Missing token handling
+- Invalid token rejection
+
+## RBAC Middleware
+
+- Role validation
+- Admin-only route protection
+- Unauthorized request blocking
+
+---
+
+## Example Test Structure
 
 ```text
 middleware/
@@ -300,7 +380,9 @@ middleware/
 ├── roleMiddleware.test.js
 ```
 
-Run tests:
+---
+
+## Run Tests
 
 ```bash
 cd backend
@@ -309,19 +391,42 @@ npm test
 
 ---
 
-## DevSecOps CI/CD
+# DevSecOps CI/CD
 
-SecureBank includes GitHub Actions security automation workflows.
+SecureBank integrates automated security validation using GitHub Actions.
 
-Pipeline capabilities:
+---
+
+## GitHub Actions Workflow
+
+![GitHub Actions Pipeline](docs/images/github-actions-run.png)
+
+---
+
+## Pipeline Execution
+
+![Pipeline Execution](docs/images/build-and-security-checks.png)
+
+---
+
+## CI/CD Security Pipeline
+
+![CI/CD Pipeline Diagram](docs/screenshots/devsecops/ci-cd-pipeline-diagram.png)
+
+---
+
+## Pipeline Capabilities
 
 - Backend dependency installation
 - Frontend dependency installation
-- Security regression testing
-- npm dependency auditing
+- Automated security regression testing
+- npm audit vulnerability scanning
 - Frontend build validation
+- Continuous integration security checks
 
-Workflow location:
+---
+
+## Workflow Location
 
 ```text
 .github/workflows/ci.yml
@@ -329,18 +434,22 @@ Workflow location:
 
 ---
 
-## Dockerized Infrastructure
+# Dockerized Infrastructure
 
-SecureBank runs inside Dockerized services using Docker Compose.
+SecureBank runs using Dockerized services managed through Docker Compose.
 
-Infrastructure includes:
+---
 
-- Backend container
-- PostgreSQL container
-- Shared internal networking
+# Services
+
+- Backend API container
+- PostgreSQL database container
+- Shared internal Docker networking
 - Environment-based configuration
 
-Start environment:
+---
+
+## Start Environment
 
 ```bash
 docker compose up --build
@@ -348,9 +457,9 @@ docker compose up --build
 
 ---
 
-## Technical Stack
+# Technical Stack
 
-### Frontend
+## Frontend
 
 - React
 - Vite
@@ -359,17 +468,21 @@ docker compose up --build
 - React Router
 - Lucide React
 
-### Backend
+---
+
+## Backend
 
 - Node.js
-- Express
+- Express.js
 - PostgreSQL
 - JWT
 - Multer
 - Jest
 - Supertest
 
-### Infrastructure
+---
+
+## Infrastructure
 
 - Docker
 - Docker Compose
@@ -377,225 +490,55 @@ docker compose up --build
 
 ---
 
-## Security Engineering Concepts Demonstrated
-
-| Security Area         | Demonstrated |
-| --------------------- | ------------ |
-| Authentication        | Yes          |
-| Authorization         | Yes          |
-| RBAC                  | Yes          |
-| IDOR Prevention       | Yes          |
-| Upload Validation     | Yes          |
-| Security Monitoring   | Yes          |
-| Audit Logging         | Yes          |
-| Detection Engineering | Yes          |
-| SOC Telemetry         | Yes          |
-| Security Testing      | Yes          |
-| DevSecOps             | Yes          |
-| CI/CD Automation      | Yes          |
-
----
-
-## Future Roadmap
-
-Planned future improvements:
-
-- Trivy container scanning
-- Semgrep SAST
-- CodeQL analysis
-- Secret scanning
-- Docker hardening
-- AWS deployment
-- Persistent telemetry storage
-- Exportable audit reports
-- SIEM integration
-- Infrastructure-as-Code security
-
----
-
-## Lessons Learned
-
-SecureBank demonstrates that modern security engineering extends far beyond vulnerability remediation.
-
-This project emphasizes:
-
-- Secure software development
-- Security monitoring
-- Operational visibility
-- Defensive engineering
-- CI/CD security automation
-- Full-stack security architecture
-
-The project intentionally combines:
-
-- AppSec
-- SOC workflows
-- DevSecOps
-- Secure engineering practices
-
-within a realistic enterprise-style application.
-
----
-
-## Final Summary
-
-SecureBank is a practical security engineering platform designed to demonstrate:
-
-- Vulnerability simulation
-- Secure remediation
-- Operational monitoring
-- Security telemetry
-- Automated testing
-- CI/CD security integration
-- Dockerized deployment workflows
-
-This project was built to showcase real-world defensive security engineering concepts in a modern full-stack environment.
-
----
-
-## Architecture Overview
-
-![Architecture](docs/screenshots/ui/architecture-diagram.png)
-
-SecureBank follows a modular enterprise security architecture.
-
-### Backend
-
-- Node.js
-- Express.js
-- JWT Authentication
-- RBAC Middleware
-- PostgreSQL
-- Multer Upload Validation
-- Security Telemetry Engine
-
-### Frontend
-
-- React
-- Vite
-- Axios
-- Security Operations Dashboard
-- Audit Monitoring UI
-
-### Security Engineering
-
-- IDOR Prevention
-- Access Control Enforcement
-- Secure File Upload Validation
-- SOC Event Monitoring
-- Security Audit Logging
-- Dockerized Infrastructure
-- CI/CD Security Automation
-
-## DevSecOps CI/CD
-
-SecureBank integrates automated security validation into the CI/CD pipeline using GitHub Actions.
-
-### CI/CD Security Workflow
-
-![CI/CD Pipeline](docs/screenshots/devsecops/ci-cd-pipeline-diagram.png)
-
-### Pipeline Capabilities
-
-- Automated Jest regression testing
-- Backend dependency installation
-- Security-focused test execution
-- npm audit vulnerability scanning
-- Continuous security validation
-
-### GitHub Actions Workflow
-
-```yaml
-name: SecureBank CI Pipeline
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  security-pipeline:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Backend Dependencies
-        working-directory: ./backend
-        run: npm install
-
-      - name: Run Backend Security Tests
-        working-directory: ./backend
-        run: npm test
-
-      - name: Backend Security Audit
-        working-directory: ./backend
-        run: npm audit --audit-level=high
-```
-
----
-
-## Security Testing
-
-SecureBank includes backend regression testing using Jest.
-
-### Implemented Tests
-
-| Test                   | Purpose                        |
-| ---------------------- | ------------------------------ |
-| authMiddleware.test.js | JWT authentication validation  |
-| roleMiddleware.test.js | RBAC authorization enforcement |
-
-### Example Test Execution
-
-```bash
-npm test
-```
-
----
-
-## Dockerized Infrastructure
-
-SecureBank runs inside a containerized environment using Docker Compose.
-
-### Services
-
-- Backend API
-- PostgreSQL Database
-
-### Run Project
-
-```bash
-docker compose up --build
-```
-
----
-
-## Security Engineering Skills Demonstrated
-
-This project demonstrates practical experience with:
+# Security Engineering Skills Demonstrated
 
 - Application Security (AppSec)
-- Access Control Enforcement
-- OWASP Vulnerability Mitigation
-- Security Monitoring
-- Security Operations (SOC)
-- JWT Authentication
 - RBAC Authorization
-- Docker
-- CI/CD Security Automation
-- Backend Security Testing
-- DevSecOps Engineering
+- JWT Authentication
 - Secure API Design
-- Security Event Telemetry
+- IDOR Prevention
+- Secure File Upload Validation
+- SOC Monitoring
+- Security Telemetry
+- Detection Engineering
+- Audit Logging
+- Docker Infrastructure
+- Security Regression Testing
+- CI/CD Security Automation
+- DevSecOps Engineering
 
 ---
+
+# Additional Documentation
+
+| Document                    | Description                             |
+| --------------------------- | --------------------------------------- |
+| docs/architecture.md        | System architecture and platform design |
+| docs/remediation-summary.md | Vulnerability remediation walkthroughs  |
+| docs/deployment-notes.md    | Deployment and Docker notes             |
+
+---
+
+# Future Improvements
+
+Planned future enhancements include:
+
+- Trivy container scanning
+- Semgrep SAST integration
+- GitHub CodeQL analysis
+- AWS deployment
+- Persistent telemetry storage
+- SIEM integration
+- Infrastructure-as-Code security
+- Secret scanning
+- Docker hardening
+
+---
+
+# Final Notes
+
+SecureBank was built to simulate realistic security engineering workflows across application security, operational monitoring, and DevSecOps automation.
+
+The project combines vulnerability remediation, backend security controls, telemetry monitoring, automated testing, and CI/CD validation inside a modern full-stack environment.
+
+This repository was designed as a practical security engineering portfolio project focused on defensive security engineering concepts and secure software development practices.
