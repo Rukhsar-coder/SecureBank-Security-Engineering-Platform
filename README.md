@@ -423,6 +423,7 @@ SecureBank integrates automated security validation using GitHub Actions.
 - npm audit vulnerability scanning
 - Frontend build validation
 - Continuous integration security checks
+- Trivy filesystem security scanning
 
 ---
 
@@ -523,7 +524,6 @@ docker compose up --build
 
 Planned future enhancements include:
 
-- Trivy container scanning
 - Semgrep SAST integration
 - GitHub CodeQL analysis
 - AWS deployment
