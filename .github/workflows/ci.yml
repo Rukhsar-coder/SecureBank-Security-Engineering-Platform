@@ -75,6 +75,16 @@ jobs:
           ignore-unfixed: true
 
       #################################################
+      # SEMGREP STATIC APPLICATION SECURITY TESTING
+      #################################################
+
+      - name: Run Semgrep SAST Scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+
+      #################################################
       # PIPELINE STATUS
       #################################################
 
