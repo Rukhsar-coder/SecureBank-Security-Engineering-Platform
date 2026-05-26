@@ -391,47 +391,52 @@ npm test
 
 ---
 
-# DevSecOps CI/CD
+# 🔄 GitHub Actions Security Pipeline
 
-SecureBank integrates automated security validation using GitHub Actions.
+SecureBank includes an automated DevSecOps CI/CD pipeline using GitHub Actions.
 
----
+The pipeline validates application security, dependency health, build integrity, and filesystem vulnerabilities before deployment.
 
-## GitHub Actions Workflow
+## Automated Security Checks
 
-![GitHub Actions Pipeline](docs/images/github-actions-run.png)
-
----
-
-## Pipeline Execution
-
-![Pipeline Execution](docs/images/build-and-security-checks.png)
-
----
-
-## CI/CD Security Pipeline
-
-![CI/CD Pipeline Diagram](docs/screenshots/devsecops/ci-cd-pipeline-diagram.png)
-
----
-
-## Pipeline Capabilities
-
-- Backend dependency installation
-- Frontend dependency installation
-- Automated security regression testing
-- npm audit vulnerability scanning
+- Backend security regression testing (Jest)
 - Frontend build validation
-- Continuous integration security checks
+- Dependency vulnerability scanning (`npm audit`)
 - Trivy filesystem security scanning
+- CI/CD pipeline validation
+- Secure build verification
 
 ---
 
-## Workflow Location
+## GitHub Actions Workflow Overview
 
-```text
-.github/workflows/ci.yml
-```
+![GitHub Actions Workflow](./assets/github-actions-overview.png)
+
+---
+
+## Successful Pipeline Execution
+
+The SecureBank pipeline successfully validates:
+
+- Backend dependencies
+- Frontend dependencies
+- Security tests
+- Vulnerability scanning
+- Trivy filesystem scanning
+- Production build integrity
+
+![Pipeline Execution](./assets/trivy-pipeline-success.png)
+
+---
+
+## DevSecOps Security Benefits
+
+- Continuous security validation
+- Early vulnerability detection
+- Automated dependency scanning
+- Secure deployment readiness
+- Security integrated into SDLC
+- Repeatable and auditable build process
 
 ---
 
