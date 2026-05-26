@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
-
 const { protect } = require("./authMiddleware");
-process.env.JWT_SECRET = "testsecret";
+process.env.JWT_SECRET = process.env.JWT_SECRET || "temporary_test_secret";
 
 describe("Auth Middleware", () => {
   test("Should reject request with missing token", () => {
