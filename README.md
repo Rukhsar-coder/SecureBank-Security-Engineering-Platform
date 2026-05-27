@@ -403,6 +403,7 @@ The pipeline validates application security, dependency health, build integrity,
 - Frontend build validation
 - Dependency vulnerability scanning (`npm audit`)
 - Trivy filesystem security scanning
+- Semgrep SAST integration
 - CI/CD pipeline validation
 - Secure build verification
 
@@ -437,6 +438,62 @@ The SecureBank pipeline successfully validates:
 - Secure deployment readiness
 - Security integrated into SDLC
 - Repeatable and auditable build process
+
+---
+
+## Semgrep SAST Security Validation
+
+SecureBank integrates Semgrep Static Application Security Testing (SAST) into the GitHub Actions CI/CD pipeline to automatically identify insecure coding patterns and security vulnerabilities during development.
+
+The Semgrep integration continuously scans backend source code and security middleware for potential security risks before deployment.
+
+### Semgrep Security Capabilities
+
+- Static application security testing (SAST)
+- Automated source code analysis
+- Hardcoded secret detection
+- Secure coding validation
+- CI/CD security enforcement
+- Early vulnerability detection
+
+---
+
+## Real Security Finding & Remediation
+
+During pipeline execution, Semgrep detected a hardcoded JWT secret inside a backend authentication test file.
+
+### Security Finding
+
+```text
+javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret
+```
+
+The finding identified insecure secret handling practices that could expose authentication credentials inside source code repositories.
+
+---
+
+## Remediation Applied
+
+The hardcoded JWT secret was removed and replaced with environment-variable-based secret handling using:
+
+```js
+process.env.JWT_SECRET;
+```
+
+This remediation aligned the authentication workflow with secure secret management practices and allowed the CI/CD security pipeline to validate successfully.
+
+---
+
+## Security Engineering Workflow Demonstrated
+
+The SecureBank pipeline now demonstrates:
+
+- Automated SAST security scanning
+- CI/CD security enforcement
+- Vulnerability detection
+- Security remediation workflows
+- Secure secret management
+- Secure SDLC validation
 
 ---
 
@@ -529,7 +586,6 @@ docker compose up --build
 
 Planned future enhancements include:
 
-- Semgrep SAST integration
 - GitHub CodeQL analysis
 - AWS deployment
 - Persistent telemetry storage
