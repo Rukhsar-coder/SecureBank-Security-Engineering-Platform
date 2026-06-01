@@ -53,10 +53,41 @@ describe("Auth Middleware", () => {
     expect(next).not.toHaveBeenCalled();
   });
 
+  test("Should allow valid customer token", () => {
+    const token = jwt.sign(
+      {
+        username: "john",
+        role: "customer",
+      },
+      process.env.JWT_SECRET,
+    );
+
+    const req = {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    const next = jest.fn();
+
+    protect(req, res, next);
+
+    expect(next).toHaveBeenCalled();
+
+    expect(req.user.username).toBe("john");
+
+    expect(req.user.role).toBe("customer");
+  });
+
   test("Should allow valid token", () => {
     const token = jwt.sign(
       {
-        username: "admin_user",
+        username: "security_admin",
         role: "admin",
       },
 
@@ -81,7 +112,7 @@ describe("Auth Middleware", () => {
 
     expect(next).toHaveBeenCalled();
 
-    expect(req.user.username).toBe("admin_user");
+    expect(req.user.username).toBe("security_admin");
 
     expect(req.user.role).toBe("admin");
   });

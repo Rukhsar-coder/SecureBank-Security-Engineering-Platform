@@ -1,4 +1,29 @@
-INSERT INTO users (username, password, role)
+INSERT INTO users (
+  username,
+  password,
+  role,
+  account_number,
+  balance
+)
 VALUES
-('admin_user', 'hashedpassword', 'admin'),
-('customer_user', 'hashedpassword', 'customer');
+(
+  'john_doe',
+  'password123',
+  'customer',
+  'SB-100001',
+  5000
+),
+(
+  'jane_smith',
+  'password456',
+  'customer',
+  'SB-100002',
+  2500
+),
+(
+  'security_admin',
+  'adminpass',
+  'admin',
+  'SB-ADMIN',
+  0
+);

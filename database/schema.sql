@@ -1,8 +1,11 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  username VARCHAR(50),
-  password VARCHAR(255),
-  role VARCHAR(20)
+  username VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'customer',
+  account_number VARCHAR(20) UNIQUE,
+  balance DECIMAL DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE transactions (
