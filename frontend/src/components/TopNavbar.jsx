@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 function TopNavbar() {
   const navigate = useNavigate();
+  const username = localStorage.getItem("username");
+
+  const role = localStorage.getItem("role");
   const handleLogout = () => {
     localStorage.removeItem("token");
 
@@ -61,14 +64,17 @@ function TopNavbar() {
 
         <div className="flex items-center gap-4 bg-[#0B1120] border border-[#1F2937] rounded-2xl px-4 py-2">
           <div className="w-11 h-11 rounded-full bg-[#3B82F6] flex items-center justify-center font-semibold">
-            JD
+            {username
+              ?.split("_")
+              .map((part) => part[0].toUpperCase())
+              .join("")}
           </div>
 
           <div>
-            <p className="text-sm font-medium">John Doe</p>
+            <p className="text-sm font-medium">{username}</p>
 
             <p className="text-xs text-[#9CA3AF] mt-1">
-              Security Administrator
+              {role === "admin" ? "Security Administrator" : "Customer"}
             </p>
           </div>
         </div>

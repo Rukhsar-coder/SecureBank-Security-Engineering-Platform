@@ -6,6 +6,8 @@ import Transactions from "./pages/Transactions";
 import SecurityCenter from "./pages/SecurityCenter";
 import AuditLogs from "./pages/AuditLogs";
 import Forbidden from "./pages/Forbidden";
+import Profile from "./pages/Profile";
+import UserManagement from "./pages/UserManagement";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminRoute from "./routes/AdminRoute";
@@ -28,6 +30,28 @@ function App() {
           <ProtectedRoute>
             <Dashboard />
           </ProtectedRoute>
+        }
+      />
+
+      {/* PROFILE */}
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* USER MANAGEMENT */}
+
+      <Route
+        path="/users"
+        element={
+          <AdminRoute>
+            <UserManagement />
+          </AdminRoute>
         }
       />
 

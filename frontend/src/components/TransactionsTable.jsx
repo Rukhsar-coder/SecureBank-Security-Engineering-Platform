@@ -40,7 +40,7 @@ function TransactionsTable() {
       </section>
     );
   }
-
+  console.log(transactions);
   return (
     <section className="mt-8 bg-[#111827] border border-[#1F2937] rounded-3xl p-8">
       {/* HEADER */}
@@ -67,7 +67,9 @@ function TransactionsTable() {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b border-[#1F2937] text-left">
-              <th className="pb-4 text-sm font-medium text-[#9CA3AF]">ID</th>
+              <th className="pb-4 text-sm font-medium text-[#9CA3AF]">
+                Direction
+              </th>
 
               <th className="pb-4 text-sm font-medium text-[#9CA3AF]">
                 Sender
@@ -82,6 +84,8 @@ function TransactionsTable() {
               </th>
 
               <th className="pb-4 text-sm font-medium text-[#9CA3AF]">Note</th>
+
+              <th className="pb-4 text-sm font-medium text-[#9CA3AF]">Date</th>
             </tr>
           </thead>
 
@@ -91,7 +95,17 @@ function TransactionsTable() {
                 key={transaction.id}
                 className="hover:bg-[#0B1120] transition border-b border-[#1F2937]"
               >
-                <td className="py-5 text-sm">{transaction.id}</td>
+                <td className="py-5 text-sm">
+                  <span
+                    className={
+                      transaction.direction === "sent"
+                        ? "text-red-400 font-medium"
+                        : "text-green-400 font-medium"
+                    }
+                  >
+                    {transaction.direction}
+                  </span>
+                </td>
 
                 <td className="py-5 text-sm">{transaction.sender}</td>
 
@@ -103,6 +117,10 @@ function TransactionsTable() {
 
                 <td className="py-5 text-sm text-[#9CA3AF]">
                   {transaction.note}
+                </td>
+
+                <td className="py-5 text-sm text-[#9CA3AF]">
+                  {new Date(transaction.created_at).toLocaleDateString()}
                 </td>
               </tr>
             ))}

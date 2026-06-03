@@ -2,7 +2,8 @@ import DashboardLayout from "../layouts/DashboardLayout";
 
 import SecurityMetrics from "../components/SecurityMetrics";
 import ThreatActivity from "../components/ThreatActivity";
-import TransactionsTable from "../components/TransactionsTable";
+import AccountOverview from "../components/AccountOverview";
+import RecentTransactions from "../components/RecentTransactions";
 
 function Dashboard() {
   return (
@@ -18,6 +19,7 @@ function Dashboard() {
           Monitor threats, transactions, and enterprise banking activity.
         </p>
       </div>
+      <AccountOverview />
 
       {/* SECURITY METRICS */}
 
@@ -28,8 +30,7 @@ function Dashboard() {
       <ThreatActivity />
 
       {/* TRANSACTIONS */}
-
-      <TransactionsTable />
+      <RecentTransactions />
     </DashboardLayout>
   );
 }

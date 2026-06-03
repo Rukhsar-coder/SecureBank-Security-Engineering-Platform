@@ -15,3 +15,15 @@ export const getTransactions = async () => {
 
   return response.data;
 };
+
+export const transferFunds = async (transferData) => {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.post(`${API_URL}/transfer`, transferData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};

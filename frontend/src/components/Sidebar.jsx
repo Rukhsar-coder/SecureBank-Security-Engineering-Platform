@@ -8,6 +8,7 @@ import {
 
 import { Link, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { User, Users } from "lucide-react";
 
 function Sidebar() {
   const token = localStorage.getItem("token");
@@ -60,6 +61,14 @@ function Sidebar() {
 
             <span className="text-sm font-medium text-white">Dashboard</span>
           </Link>
+          <Link
+            to="/profile"
+            className="w-full flex items-center gap-4 hover:bg-[#111827] transition rounded-2xl px-5 py-4 text-left"
+          >
+            <User size={20} className="text-[#9CA3AF]" />
+
+            <span className="text-sm text-[#D1D5DB]">Profile</span>
+          </Link>
           {role === "admin" && (
             <Link
               to="/security"
@@ -101,25 +110,49 @@ function Sidebar() {
             <span className="text-sm text-[#D1D5DB]">Transactions</span>
           </Link>
 
-          <Link
-            to="/audit-logs"
-            className={`w-full flex items-center gap-4 rounded-2xl px-5 py-4 text-left transition border ${
-              location.pathname === "/audit-logs"
-                ? "bg-[#111827] border-[#374151]"
-                : "border-transparent hover:bg-[#111827]"
-            }`}
-          >
-            <ClipboardList
-              size={20}
-              className={
+          {role === "admin" && (
+            <Link
+              to="/audit-logs"
+              className={`w-full flex items-center gap-4 rounded-2xl px-5 py-4 text-left transition border ${
                 location.pathname === "/audit-logs"
-                  ? "text-[#3B82F6]"
-                  : "text-[#9CA3AF]"
-              }
-            />
+                  ? "bg-[#111827] border-[#374151]"
+                  : "border-transparent hover:bg-[#111827]"
+              }`}
+            >
+              <ClipboardList
+                size={20}
+                className={
+                  location.pathname === "/audit-logs"
+                    ? "text-[#3B82F6]"
+                    : "text-[#9CA3AF]"
+                }
+              />
 
-            <span className="text-sm text-[#D1D5DB]">Audit Logs</span>
-          </Link>
+              <span className="text-sm text-[#D1D5DB]">Audit Logs</span>
+            </Link>
+          )}
+
+          {role === "admin" && (
+            <Link
+              to="/users"
+              className={`w-full flex items-center gap-4 rounded-2xl px-5 py-4 text-left transition border ${
+                location.pathname === "/users"
+                  ? "bg-[#111827] border-[#374151]"
+                  : "border-transparent hover:bg-[#111827]"
+              }`}
+            >
+              <Users
+                size={20}
+                className={
+                  location.pathname === "/users"
+                    ? "text-[#3B82F6]"
+                    : "text-[#9CA3AF]"
+                }
+              />
+
+              <span className="text-sm text-[#D1D5DB]">User Management</span>
+            </Link>
+          )}
         </nav>
       </div>
 

@@ -35,6 +35,12 @@ The platform combines:
 | Secure File Upload Validation    | Implemented |
 | Security Event Monitoring        | Implemented |
 | SOC Telemetry Dashboard          | Implemented |
+| Audit Logging                    | Implemented |
+| User Management                  | Implemented |
+| Customer Dashboard               | Implemented |
+| Admin Dashboard                  | Implemented |
+| Profile Management               | Implemented |
+| Transaction Monitoring           | Implemented |
 | Jest Security Testing            | Implemented |
 | GitHub Actions CI/CD             | Implemented |
 | Dockerized Infrastructure        | Implemented |
@@ -43,11 +49,32 @@ The platform combines:
 
 # Architecture Overview
 
-![Architecture Diagram](docs/screenshots/ui/architecture-diagram.png)
+![Architecture Diagram](docs/screenshots/ui/architecture-diagram-v2.png)
 
 SecureBank follows a modular security-focused architecture designed around separation of concerns, protected APIs, telemetry collection, and operational monitoring.
 
 ## Architecture Components
+
+## Platform Access Model
+
+SecureBank implements Role-Based Access Control (RBAC) across the application.
+
+### Administrator Access
+
+- Dashboard
+- Profile
+- Security Center
+- Transactions
+- Audit Logs
+- User Management
+
+### Customer Access
+
+- Dashboard
+- Profile
+- Transactions
+
+Administrative security telemetry and management functionality remain restricted to authorized administrator accounts.
 
 ### Frontend
 
@@ -86,31 +113,120 @@ SecureBank follows a modular security-focused architecture designed around separ
 
 ## Login Page
 
+Secure authentication portal protected by JWT authentication and role-based access controls.
+
 ![Login Page](docs/screenshots/ui/login.png)
 
 ---
 
 ## Admin Dashboard
 
-![Admin Dashboard](docs/screenshots/ui/dashboard.png)
+The administrator dashboard provides security telemetry, operational monitoring, transaction visibility, and threat intelligence metrics.
+
+![Admin Dashboard](docs/screenshots/ui/admin-dashboard.png)
+
+### Highlights
+
+- Security score monitoring
+- Active threat tracking
+- Security event visibility
+- Audit event monitoring
+- System status monitoring
+- Transaction overview
+- Security telemetry dashboard
 
 ---
 
 ## Customer Dashboard
 
-![Customer Dashboard](docs/screenshots/ui/dashboard%20Customer.png)
+Customer users receive a restricted dashboard experience with access limited to their account information and transaction history.
+
+![Customer Dashboard](docs/screenshots/ui/customer-dashboard.png)
+
+### Highlights
+
+- Account overview
+- Personal balance information
+- Recent transaction activity
+- Security status visibility
+- RBAC-protected user experience
+
+---
+
+## Profile Page
+
+Authenticated users can review account information and assigned privileges.
+
+![Profile Page](docs/screenshots/ui/profile-page.png)
+
+### Highlights
+
+- Account metadata
+- Role visibility
+- Security privilege level
+- Account status information
 
 ---
 
 ## Security Operations Center
 
+SOC-style operational monitoring and threat visibility.
+
 ![Security Center](docs/screenshots/ui/security-center.png)
+
+### Highlights
+
+- SQL injection monitoring
+- Failed authentication tracking
+- Security event feed
+- Threat telemetry
+- API security monitoring
+- Threat activity dashboards
+
+---
+
+## Transactions
+
+Secure transaction management and transaction monitoring.
+
+![Transactions](docs/screenshots/ui/transactions-page.png)
+
+### Highlights
+
+- Fund transfer workflow
+- Transaction monitoring
+- Account activity visibility
+- Secure transaction operations
 
 ---
 
 ## Audit Logs
 
+Enterprise security event monitoring and audit visibility.
+
 ![Audit Logs](docs/screenshots/ui/audit-logs.png)
+
+### Highlights
+
+- Authentication auditing
+- Security event tracking
+- Operational logging
+- Incident visibility
+
+---
+
+## User Management
+
+Administrative interface for managing customer accounts and account visibility.
+
+![User Management](docs/screenshots/ui/user-management.png)
+
+### Highlights
+
+- User account visibility
+- Role management
+- Account tracking
+- Administrative oversight
 
 ---
 

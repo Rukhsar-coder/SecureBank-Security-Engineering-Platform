@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const { loginLimiter } = require("../middleware/rateLimitMiddleware");
 const pool = require("../config/db");
+const { protect } = require("../middleware/authMiddleware");
 const router = express.Router();
 
 // Previous implementation lacked protection against brute-force & credential stuffing attacks
@@ -122,6 +123,36 @@ router.post("/register", async (req, res) => {
       role: result.rows[0].role,
       accountNumber: result.rows[0].account_number,
       balance: result.rows[0].balance,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+});
+
+router.get("/me", protect, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT username, role, account_number, balance FROM users WHERE username = $1",
+      [req.user.username],
+    );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      username: user.username,
+      role: user.role,
+      accountNumber: user.account_number,
+      balance: user.balance,
     });
   } catch (error) {
     console.error(error);

@@ -34,6 +34,14 @@ function Login() {
 
       localStorage.setItem("token", data.token);
 
+      localStorage.setItem("username", data.username);
+
+      localStorage.setItem("role", data.role);
+
+      localStorage.setItem("accountNumber", data.accountNumber);
+
+      localStorage.setItem("balance", data.balance);
+
       navigate("/dashboard");
     } catch {
       setError("Invalid username or password.");

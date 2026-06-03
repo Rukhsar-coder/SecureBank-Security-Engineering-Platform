@@ -8,16 +8,31 @@ const router = express.Router();
 
 router.get("/", protect, auditLogger, async (req, res) => {
   const result = await pool.query(
-    "SELECT * FROM public.transactions ORDER BY created_at DESC",
+    `
+    SELECT *
+    FROM public.transactions
+    WHERE sender = $1
+    OR receiver = $1
+    ORDER BY created_at DESC
+    `,
+    [req.user.username],
   );
 
   // Ownership-Based Access Control:
   // Prevents IDOR (Insecure Direct Object Reference)
-  // by ensuring users can only access their own transactions.
+  // by ensuring users can only access transactions
+  // where they are either the sender or receiver.
 
-  const userTransactions = result.rows.filter(
-    (transaction) => transaction.sender === req.user.username,
-  );
+  const userTransactions = result.rows.map((transaction) => ({
+    ...transaction,
+
+    // Transaction Direction:
+    // Added to support frontend transaction history UI.
+    // Allows customers to distinguish between
+    // outgoing and incoming transactions.
+
+    direction: transaction.sender === req.user.username ? "sent" : "received",
+  }));
 
   res.json(userTransactions);
 });
@@ -75,6 +90,79 @@ router.get("/search/:query", (req, res) => {
     sql: simulatedSQLQuery,
     parameters,
   });
+});
+
+router.post("/transfer", protect, auditLogger, async (req, res) => {
+  try {
+    const { receiver, amount, note } = req.body;
+
+    const sender = req.user.username;
+
+    if (!receiver || !amount) {
+      return res.status(400).json({
+        message: "Receiver and amount are required",
+      });
+    }
+
+    const senderResult = await pool.query(
+      "SELECT * FROM users WHERE username = $1",
+      [sender],
+    );
+
+    const receiverResult = await pool.query(
+      "SELECT * FROM users WHERE username = $1",
+      [receiver],
+    );
+
+    const senderUser = senderResult.rows[0];
+    const receiverUser = receiverResult.rows[0];
+
+    if (!receiverUser) {
+      return res.status(404).json({
+        message: "Receiver account not found",
+      });
+    }
+
+    if (Number(senderUser.balance) < Number(amount)) {
+      return res.status(400).json({
+        message: "Insufficient funds",
+      });
+    }
+
+    await pool.query(
+      "UPDATE users SET balance = balance - $1 WHERE username = $2",
+      [amount, sender],
+    );
+
+    await pool.query(
+      "UPDATE users SET balance = balance + $1 WHERE username = $2",
+      [amount, receiver],
+    );
+
+    await pool.query(
+      `
+      INSERT INTO transactions
+      (
+        sender,
+        receiver,
+        amount,
+        note
+      )
+      VALUES ($1,$2,$3,$4)
+      `,
+      [sender, receiver, amount, note || "Transfer"],
+    );
+
+    res.json({
+      message: "Transfer completed successfully",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
 });
 
 module.exports = router;

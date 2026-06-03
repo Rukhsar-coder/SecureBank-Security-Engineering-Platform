@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const { errorHandler } = require("./middleware/errorMiddleware");
 const securityRoutes = require("./routes/securityRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 const pool = require("./config/db");
 
@@ -49,6 +50,7 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/security", securityRoutes);
+app.use("/api/admin", adminRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
